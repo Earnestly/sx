@@ -1,0 +1,56 @@
+sx <https://github.com/Earnestly/sx>
+
+INTRODUCTION
+
+  sx is a simple alternative to both xinit(1) and startx(1).
+
+  It started life as a proof of concept while attempting to learn how both
+  xinit(1) and startx(1) worked.
+
+  It is not a direct replacement however as it provides a different, more
+  limited, interface.
+
+  Some of these differences are as follows:
+
+    * The Xorg server's command-line is hard coded and not exposed to the
+      user.
+
+    * The first DISPLAY is 1 instead of 0 contrary to what X(7) suggests.
+
+    * xauth entries are overwritten if the displayname is identical.
+
+    * Corresponding xauth entries are unconditionally removed when the Xorg
+      server is terminated.
+
+    * The Xorg server uses the -noreset flag.
+
+    * The Xorg server logs are written to $XDG_DATA_HOME/sx/$DISPLAY instead
+      of Xorg.$DISPLAY.log
+
+    * While XAUTHORITY is still honoured, $XDG_CONFIG_HOME/sx/xauthfile is
+      used instead of $HOME/.Xauthority
+
+    * Very little proxy error checking is used preferring instead to let each
+      tool used speak for itself.
+
+    * None of the typical /etc/X11/xinit infrastructure is directly used.
+
+    * Neither XINITRC is honoured nor .xinitrc used.
+
+    * The XDG_CONFIG_HOME/sx/sxrc file is used instead of .xinitrc and is
+      required to be executable.
+
+  For a rational on why this exists, the author invites the reader to look
+  over the source code for both xinit(1) and startx(1).
+
+REQUIRES
+
+  Notable requirements are for GNU timeout and GNU tail which is used for the
+  --pid option.  Beyond these the usual set of POSIX command-line tools along
+  with Xorg and xauth are required.
+
+BUILD
+
+  As there's nothing to build, simply install using a prefered PREFIX.
+
+    make DESTDIR=staged PREFIX=/usr install

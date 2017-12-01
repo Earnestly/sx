@@ -1,0 +1,81 @@
+#!/bin/sh --
+# sx - start an xserver
+
+# requires fgconsole stty timeout xauth Xorg
+
+# I'm willing to take advantage of errexit for this script as roughly 85% of
+# the error checking would take the form of:
+#   if ! command; then
+#       exit
+#   fi
+set -o errexit
+
+error() {
+    # To expose printf's DSL we will need to use a positional argument for the
+    # format string.
+    # shellcheck disable=SC2059
+    printf -- "sx: $2" "${@:3}" >&2
+    exit "$1"
+}
+
+cleanup() {
+    # Return to conventional flow control here as we need to continue
+    # regardless of failure.
+    set +o errexit
+
+    if [ "$(ps -o comm= "$1")" = Xorg ]; then
+        kill "$1"
+
+        # Send SIGKILL after 10 seconds if the xserver is taking too long to
+        # terminate.
+        timeout 10 tail --pid="$1" -f /dev/null
+
+        case $? in
+            124) kill -s KILL "$1"
+        esac
+
+        xauth remove :"$tty"
+    fi
+
+    if ! stty "$stty"; then
+        stty sane
+    fi
+
+    exit
+}
+
+stty=$(stty -g)
+
+tty=$(ps -o tty= $$)
+
+case $tty in
+    tty*) tty=${tty#tty}
+esac
+
+cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
+datadir=${XDG_DATA_HOME:-$HOME/.local/share}/sx
+XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthfile}
+
+mkdir -p "$cfgdir" "$datadir"
+
+trap 'cleanup "$pid"' EXIT
+
+touch "$XAUTHORITY"
+export XAUTHORITY
+
+xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(mcookie)"
+
+# Xorg will check if SIGUSR1 was set to SIG_IGN in its environment and issue
+# its own SIGUSR1 back to the parent process when it is ready to accept
+# connections.  See Xserver(1).
+
+# We take advantage of this feature to launch our client directly from the
+# SIGUSR1 handler and avoid the need to poll for readiness.
+trap 'DISPLAY=:$tty "${@:-"$cfgdir"/sxrc}"' USR1
+(
+    trap '' USR1
+    exec /usr/lib/xorg-server/Xorg :"$tty" -keeptty vt"$tty" -noreset \
+                                   -logfile "$datadir/$tty" -auth "$XAUTHORITY"
+) & pid=$!
+
+wait
