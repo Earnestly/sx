@@ -23,7 +23,7 @@ cleanup() {
     # regardless of failure.
     set +o errexit
 
-    if [ "$(ps -o comm= "$1")" = Xorg ]; then
+    if [ "$1" ] && [ "$(ps -o comm= "$1")" = Xorg ]; then
         kill "$1"
 
         # Send SIGKILL after 10 seconds if the xserver is taking too long to
@@ -34,18 +34,17 @@ cleanup() {
             124) kill -s KILL "$1"
         esac
 
-        xauth remove :"$tty"
     fi
 
     if ! stty "$stty"; then
         stty sane
     fi
 
+    xauth remove :"$tty"
     exit
 }
 
 stty=$(stty -g)
-
 tty=$(ps -o tty= $$)
 
 case $tty in
@@ -58,10 +57,10 @@ XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthfile}
 
 mkdir -p "$cfgdir" "$datadir"
 
-trap 'cleanup "$pid"' EXIT
-
 touch "$XAUTHORITY"
 export XAUTHORITY
+
+trap 'cleanup "$pid"' EXIT
 
 xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(mcookie)"
 
