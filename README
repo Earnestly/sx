@@ -24,6 +24,8 @@ INTRODUCTION
 
     * The Xorg server uses the -noreset flag.
 
+    * /usr/lib/xorg-server/Xorg is used directly, bypassing Xorg.wrap.
+
     * The Xorg server logs are written to $XDG_DATA_HOME/sx/$DISPLAY instead
       of Xorg.$DISPLAY.log
 
@@ -31,7 +33,7 @@ INTRODUCTION
       used instead of $HOME/.Xauthority
 
     * Very little proxy error checking is used preferring instead to let each
-      tool used speak for itself.
+      tool speak for itself.
 
     * None of the typical /etc/X11/xinit infrastructure is directly used.
 
