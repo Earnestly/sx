@@ -44,12 +44,10 @@ case $tty in
 esac
 
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
-XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthority}
+export XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthority}
 
 mkdir -p "$cfgdir"
-
 touch "$XAUTHORITY"
-export XAUTHORITY
 
 trap 'cleanup "$pid"' EXIT
 
