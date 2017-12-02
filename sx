@@ -10,14 +10,6 @@
 #   fi
 set -o errexit
 
-error() {
-    # To expose printf's DSL we will need to use a positional argument for the
-    # format string.
-    # shellcheck disable=SC2059
-    printf -- "sx: $2" "${@:3}" >&2
-    exit "$1"
-}
-
 cleanup() {
     # Return to conventional flow control here as we need to continue
     # regardless of failure.
