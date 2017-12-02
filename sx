@@ -44,10 +44,9 @@ case $tty in
 esac
 
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
-datadir=${XDG_DATA_HOME:-$HOME/.local/share}/sx
-XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthfile}
+XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthority}
 
-mkdir -p "$cfgdir" "$datadir"
+mkdir -p "$cfgdir"
 
 touch "$XAUTHORITY"
 export XAUTHORITY
@@ -65,8 +64,7 @@ xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(mcookie)"
 trap 'DISPLAY=:$tty "${@:-"$cfgdir"/sxrc}"' USR1
 (
     trap '' USR1
-    exec /usr/lib/xorg-server/Xorg :"$tty" -keeptty vt"$tty" -noreset \
-                                   -logfile "$datadir/$tty" -auth "$XAUTHORITY"
+    exec /usr/lib/xorg-server/Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY"
 ) & pid=$!
 
 wait

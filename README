@@ -14,31 +14,18 @@ INTRODUCTION
 
     * The Xorg server's command-line is hard coded and not exposed to the
       user.
-
     * The first DISPLAY is 1 instead of 0 contrary to what X(7) suggests.
-
     * xauth entries are overwritten if the displayname is identical.
-
     * Corresponding xauth entries are unconditionally removed when the Xorg
       server is terminated.
-
     * The Xorg server uses the -noreset flag.
-
     * /usr/lib/xorg-server/Xorg is used directly, bypassing Xorg.wrap.
-
-    * The Xorg server logs are written to $XDG_DATA_HOME/sx/$DISPLAY instead
-      of Xorg.$DISPLAY.log
-
     * While XAUTHORITY is still honoured, $XDG_CONFIG_HOME/sx/xauthfile is
       used instead of $HOME/.Xauthority
-
     * Very little proxy error checking is used preferring instead to let each
       tool speak for itself.
-
     * None of the typical /etc/X11/xinit infrastructure is directly used.
-
     * Neither XINITRC is honoured nor .xinitrc used.
-
     * The XDG_CONFIG_HOME/sx/sxrc file is used instead of .xinitrc and is
       required to be executable.
 
