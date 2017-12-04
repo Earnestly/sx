@@ -4,10 +4,7 @@
 # requires fgconsole stty timeout xauth Xorg
 
 # I'm willing to take advantage of errexit for this script as roughly 85% of
-# the error checking would take the form of:
-#   if ! command; then
-#       exit
-#   fi
+# the error checking would just be exiting on command failure.
 set -o errexit
 
 cleanup() {
@@ -46,7 +43,7 @@ esac
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
 export XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthority}
 
-mkdir -p "$cfgdir"
+mkdir -p "$cfgdir" "${XAUTHORITY%/*}"
 touch "$XAUTHORITY"
 
 trap 'cleanup "$pid"' EXIT
