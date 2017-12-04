@@ -24,14 +24,15 @@ argument is provided.
 .SH ENVIRONMENT
 .TP
 .B XAUTHORITY
-This environment is the path to a file which to stores authorisation entries
+This environment references a file which stores authorisation entries
 used to secure
 .BR Xorg (1) .
 If this environment is not set then
 .B sx
 will create and use
 .IR \%$XDG_CONFIG_HOME/sx/xauthority
-instead.
+instead while also exporting this value to
+.BR XAUTHORITY .
 
 .SH FILES
 .TP
@@ -51,8 +52,8 @@ if an alternative file is not provided with
 .UE
 
 .SH SEE ALSO
-.BR xauth (1),
 .BR xinit (1),
 .BR startx (1),
 .BR Xserver (1),
+.BR Xsecurity (7),
 .BR X (7)
