@@ -15,7 +15,7 @@ cleanup() {
     # regardless of failure.
     set +o errexit
 
-    if [ "$1" ] && [ "$(ps -o comm= "$1")" = Xorg ]; then
+    if test "$1" -a "$(ps -o comm= "$1")" = Xorg; then
         kill "$1"
 
         # Send SIGKILL after 10 seconds if the xserver is taking too long to
