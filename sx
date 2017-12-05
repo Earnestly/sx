@@ -1,7 +1,7 @@
 #!/bin/sh --
 # sx - start an xserver
 
-# requires fgconsole stty timeout xauth Xorg
+# requires timeout tail xauth Xorg
 
 # I'm willing to take advantage of errexit for this script as roughly 85% of
 # the error checking would just be exiting on command failure.
@@ -56,7 +56,7 @@ xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(mcookie)"
 
 # We take advantage of this feature to launch our client directly from the
 # SIGUSR1 handler and avoid the need to poll for readiness.
-trap 'DISPLAY=:$tty "${@:-"$cfgdir"/sxrc}"' USR1
+trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}"' USR1
 (
     trap '' USR1
     exec /usr/lib/xorg-server/Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY"
