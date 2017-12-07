@@ -2,7 +2,8 @@ sx <https://github.com/Earnestly/sx>
 
 INTRODUCTION
 
-  sx is a simple alternative to both xinit(1) and startx(1).
+  sx is a simple alternative to both xinit(1) and startx(1) for starting
+  an Xorg server.
 
   It started life as a proof of concept while attempting to learn how both
   xinit(1) and startx(1) worked.
