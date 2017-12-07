@@ -1,7 +1,7 @@
 #!/bin/sh --
 # sx - start an xserver
 
-# requires timeout tail xauth Xorg
+# requires xauth Xorg
 
 # I'm willing to take advantage of errexit for this script as roughly 85% of
 # the error checking would just be exiting on command failure.
@@ -17,12 +17,19 @@ cleanup() {
 
         # Send SIGKILL after 10 seconds if the xserver is taking too long to
         # terminate.
-        timeout 10 tail --pid="$1" -f /dev/null
+        interval=10
+        until [ "$interval" -le 0 ]; do
+            if ! kill -0 "$1"; then
+                break
+            fi
+            sleep 1
+            interval=$((interval - 1))
+        done
 
-        case $? in
-            124) kill -s KILL "$1"
-        esac
-
+        # Make sure that the PID still refers to an Xorg process
+        if test "$interval" -le 0 -a "$(ps -o comm= "$1")" = Xorg; then
+            kill -s KILL "$1"
+        fi
     fi
 
     if ! stty "$stty"; then
@@ -48,7 +55,7 @@ touch "$XAUTHORITY"
 
 trap 'cleanup "$pid"' EXIT
 
-xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(mcookie)"
+xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(openssl rand -hex 16)"
 
 # Xorg will check if SIGUSR1 was set to SIG_IGN in its environment and issue
 # its own SIGUSR1 back to the parent process when it is ready to accept

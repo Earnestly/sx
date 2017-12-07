@@ -34,12 +34,10 @@ INTRODUCTION
 
 REQUIRES
 
-  Notable requirements are for GNU timeout and GNU tail which is used for the
-  --pid option.  Beyond these the usual set of POSIX command-line tools along
-  with Xorg and xauth are required.
+  * Xorg
+  * xauth
+  * openssl (used to generate the MIT-MAGIC-COOKIE-1 value)
 
-BUILD
+INSTALL
 
-  As there's nothing to build, simply install using a prefered PREFIX.
-
-    make DESTDIR=staged PREFIX=/usr install
+    make PREFIX=/usr DESTDIR=staged install
