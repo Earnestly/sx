@@ -1,7 +1,7 @@
 #!/bin/sh --
 # sx - start an xserver
 
-# requires xauth Xorg
+# requires openssl xauth Xorg
 
 # I'm willing to take advantage of errexit for this script as roughly 85% of
 # the error checking would just be exiting on command failure.
