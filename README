@@ -37,7 +37,7 @@ REQUIRES
 
   * Xorg
   * xauth
-  * openssl (used to generate the MIT-MAGIC-COOKIE-1 value)
+  * /dev/urandom
 
 INSTALL
 
