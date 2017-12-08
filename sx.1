@@ -1,7 +1,7 @@
 .TH sx 1 2017-12-07 sx
 
 .SH NAME
-sx \- start an xserver
+sx \- start an xorg server
 
 .SH SYNOPSIS
 .B sx
@@ -30,30 +30,40 @@ used to secure
 If this environment is not set then
 .B sx
 will create and use
-.IR \%$XDG_CONFIG_HOME/sx/xauthority
+.B \%XDG_CONFIG_HOME/sx/xauthority
 instead while also exporting this value to
 .BR XAUTHORITY .
+.TP
+.B XDG_CONFIG_HOME
+The directory used when searching for
+.I sxrc
+and storing
+.IR xauthority .
+.B \%HOME/.config
+will be used if
+.B XDG_CONFIG_HOME
+is not set.
 
 .SH FILES
 .TP
-.BR $XDG_CONFIG_HOME/sx/sxrc " " "" ( $HOME/.config/sx/sxrc )
+.B XDG_CONFIG_HOME/sx/sxrc
 The default client started by
 .BR sx .
 This file must be executable.
 .TP
-.BR $XDG_CONFIG_HOME/sx/xauthority " " "" ( $HOME/.config/sx/xauthority )
+.B XDG_CONFIG_HOME/sx/xauthority
 The default authority used by
 .B sx
 if an alternative file is not provided with
-.BR $XAUTHORITY .
+.BR XAUTHORITY .
 
 .SH SOURCE
 .UR https://github.com/Earnestly/sx
 .UE
 
 .SH SEE ALSO
+.BR Xorg (1),
 .BR xinit (1),
 .BR startx (1),
-.BR Xserver (1),
 .BR Xsecurity (7),
 .BR X (7)
