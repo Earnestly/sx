@@ -8,26 +8,9 @@
 set -o errexit
 
 cleanup() {
-    # Return to conventional flow control here as we need to continue
-    # regardless of failure.
-    set +o errexit
-
-    if [ "$1" ] && [ "$(ps -o comm= "$1")" = Xorg ]; then
-        kill "$1"
-
-        # Send SIGKILL after 10 seconds if the xserver is taking too long to
-        # terminate.
-        interval=10
-        while kill -0 "$1" 2> /dev/null; do
-            if [ "$interval" -le 0 ]; then
-                if [ "$(ps -o comm= "$1")" = Xorg ]; then
-                    kill -s KILL "$1"
-                fi
-                break
-            fi
-            interval=$((interval - 1))
-            sleep 1
-        done
+    if kill -0 "$1" 2> /dev/null; then
+        kill -s TERM "$1"
+        wait "$1"
     fi
 
     if ! stty "$stty"; then
@@ -35,6 +18,7 @@ cleanup() {
     fi
 
     xauth remove :"$tty"
+
     exit
 }
 
