@@ -18,9 +18,8 @@ cleanup() {
         # Send SIGKILL after 10 seconds if the xserver is taking too long to
         # terminate.
         interval=10
-        while kill -0 "$1"; do
+        while kill -0 "$1" 2> /dev/null; do
             if [ "$interval" -le 0 ]; then
-                # Make sure the PID is still (probably) an Xorg process.
                 if [ "$(ps -o comm= "$1")" = Xorg ]; then
                     kill -s KILL "$1"
                 fi
@@ -56,12 +55,11 @@ trap 'cleanup "$pid"' EXIT
 
 xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
 
-# Xorg will check if SIGUSR1 was set to SIG_IGN in its environment and issue
-# its own SIGUSR1 back to the parent process when it is ready to accept
-# connections.  See Xserver(1).
-
-# We take advantage of this feature to launch our client directly from the
-# SIGUSR1 handler and avoid the need to poll for readiness.
+# Xorg will check if its SIGUSR1 disposition is SIG_IGN and use this state to
+# reply back to the parent process with SIGUSR1 as an indication it is ready
+# to accept connections.
+# Taking advantage of this feature allows us to launch our client directly
+# from the SIGUSR1 handler and avoid the need to poll for server readiness.
 trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}"' USR1
 (
     trap '' USR1
