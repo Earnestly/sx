@@ -18,7 +18,6 @@ cleanup() {
     fi
 
     xauth remove :"$tty"
-
     exit
 }
 

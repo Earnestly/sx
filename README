@@ -15,6 +15,7 @@ INTRODUCTION
 
     * The Xorg server's command-line is hard coded and not exposed to the
       user.
+    * The server doesn't listen on anything except unix domain sockets.
     * The first DISPLAY is 1 instead of 0 contrary to what X(7) suggests.
     * xauth entries are overwritten if the displayname is identical.
     * Corresponding xauth entries are unconditionally removed when the Xorg
