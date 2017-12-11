@@ -6,22 +6,23 @@ INTRODUCTION
   an Xorg server.
 
   It started life as a proof of concept while attempting to learn how both
-  xinit(1) and startx(1) worked.
+  xinit and startx worked.
 
   It is not a direct replacement however as it provides a different, more
   limited, interface.
 
-  Some of these differences are as follows:
+  Some of these major differences are listed here:
 
-    * The Xorg server's command-line is hard coded and not exposed to the
+    * The server's command-line is hard coded and not exposed to the
       user.
+    * The server starts on the same tty the user logged in on.
     * The server doesn't listen on anything except unix domain sockets.
     * The first DISPLAY is 1 instead of 0 contrary to what X(7) suggests.
     * xauth entries are overwritten if the displayname is identical.
-    * Corresponding xauth entries are unconditionally removed when the Xorg
-      server is terminated.
-    * The Xorg server uses the -noreset flag.
-    * /usr/lib/xorg-server/Xorg is used directly, bypassing Xorg.wrap.
+    * Corresponding xauth entries are unconditionally removed when the server
+      exits.
+    * The server uses the -noreset flag.
+    * /usr/lib/xorg-server/Xorg is used directly to bypass Xorg.wrap.
     * While XAUTHORITY is still honoured, $XDG_CONFIG_HOME/sx/xauthfile is
       used instead of $HOME/.Xauthority
     * Very little proxy error checking is used preferring instead to let each
@@ -32,7 +33,7 @@ INTRODUCTION
       required to be executable.
 
   For a rational on why this exists, the author invites the reader to look
-  over the source code for both xinit(1) and startx(1).
+  over the source code for both xinit and startx.
 
 REQUIRES
 
@@ -42,4 +43,4 @@ REQUIRES
 
 INSTALL
 
-    make PREFIX=/usr DESTDIR=staged install
+  make PREFIX=/usr DESTDIR=staged install
