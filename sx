@@ -3,22 +3,12 @@
 
 # requires xauth Xorg
 
-# I'm willing to take advantage of errexit for this script as roughly 85% of
-# the error checking would just be exiting on command failure.
-set -o errexit
-
 cleanup() {
-    if kill -0 "$1" 2> /dev/null; then
-        kill -s TERM "$1"
-        wait "$1"
-    fi
-
     if ! stty "$stty"; then
         stty sane
     fi
 
     xauth remove :"$tty"
-    exit
 }
 
 stty=$(stty -g)
@@ -48,4 +38,10 @@ trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}"' USR1
     trap '' USR1
     exec /usr/lib/xorg-server/Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY"
 ) & pid=$!
-wait
+
+wait "$pid"
+
+if kill -0 "$pid" 2> /dev/null; then
+    kill -s TERM "$pid"
+    wait "$pid"
+fi
