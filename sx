@@ -4,11 +4,18 @@
 # requires xauth Xorg
 
 cleanup() {
+    if [ "$pid" ] && kill -0 "$pid" 2> /dev/null; then
+        kill -s TERM "$pid"
+        wait "$pid"
+        r=$?
+    fi
+
     if ! stty "$stty"; then
         stty sane
     fi
 
     xauth remove :"$tty"
+    exit "${r:-$?}"
 }
 
 stty=$(stty -g)
@@ -24,8 +31,7 @@ export XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthority}
 mkdir -p "$cfgdir" "${XAUTHORITY%/*}"
 touch "$XAUTHORITY"
 
-trap 'cleanup "$pid"' EXIT
-
+trap 'cleanup' EXIT
 xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
 
 # Xorg will check if its SIGUSR1 disposition is SIG_IGN and use this state to
@@ -34,14 +40,5 @@ xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' '
 # Taking advantage of this feature allows us to launch our client directly
 # from the SIGUSR1 handler and avoid the need to poll for server readiness.
 trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}"' USR1
-(
-    trap '' USR1
-    exec /usr/lib/xorg-server/Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY"
-) & pid=$!
-
+(trap '' USR1 && exec /usr/lib/xorg-server/Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
 wait "$pid"
-
-if kill -0 "$pid" 2> /dev/null; then
-    kill -s TERM "$pid"
-    wait "$pid"
-fi
