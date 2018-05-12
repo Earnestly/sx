@@ -22,7 +22,6 @@ INTRODUCTION
     * Corresponding xauth entries are unconditionally removed when the server
       exits.
     * The server uses the -noreset flag.
-    * /usr/lib/xorg-server/Xorg is used directly to bypass Xorg.wrap.
     * While XAUTHORITY is still honoured, $XDG_CONFIG_HOME/sx/xauthfile is
       used instead of $HOME/.Xauthority
     * Very little proxy error checking is used preferring instead to let each
