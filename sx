@@ -40,5 +40,5 @@ xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' '
 # Taking advantage of this feature allows us to launch our client directly
 # from the SIGUSR1 handler and avoid the need to poll for server readiness.
 trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}"' USR1
-(trap '' USR1 && exec /usr/lib/xorg-server/Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
+(trap '' USR1 && exec /usr/lib//Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
 wait "$pid"
