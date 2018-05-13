@@ -44,3 +44,7 @@ sx <https://github.com/Earnestly/sx>
   On Arch Linux:
   
   `# pacman -S sx`
+
+## LICENSE
+
+  MIT
