@@ -18,21 +18,20 @@ cleanup() {
     exit "${r:-$?}"
 }
 
+unset pid
 stty=$(stty -g)
-tty=$(ps -o tty= $$)
-
-case $tty in
-    tty*) tty=${tty#tty}
-esac
+tty=$(tty) || exit
+tty=${tty#/dev/}
+tty=${tty#tty}
 
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
-export XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthority}
+export XAUTHORITY=${XAUTHORITY:-${XDG_RUNTIME_DIR:-$HOME}/.X${tty}-authority}
 
-mkdir -p "$cfgdir" "${XAUTHORITY%/*}"
-touch "$XAUTHORITY"
+mkdir -p "$cfgdir" "${XAUTHORITY%/*}" || exit
+touch "$XAUTHORITY" || exit
 
 trap 'cleanup' EXIT
-xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
+xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')" || exit
 
 # Xorg will check if its SIGUSR1 disposition is SIG_IGN and use this state to
 # reply back to the parent process with SIGUSR1 as an indication it is ready
