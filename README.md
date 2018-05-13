@@ -40,3 +40,7 @@ sx <https://github.com/Earnestly/sx>
 ## INSTALL
 
   `make PREFIX=/usr DESTDIR=staged install`
+
+  On Arch Linux:
+  
+  `# pacman -S sx`
