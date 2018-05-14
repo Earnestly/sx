@@ -18,27 +18,31 @@ cleanup() {
     exit "${r:-$?}"
 }
 
-stty=$(stty -g)
-tty=$(ps -o tty= $$)
+do_sx() {
+    xauth generate "$DISPLAY" MIT-MAGIC-COOKIE-1 trusted timeout 0
+    DISPLAY=:$tty "${@:-$cfgdir/sxrc}"
+}
 
-case $tty in
-    tty*) tty=${tty#tty}
-esac
+unset pid
+stty=$(stty -g)
+tty=$(tty) || exit
+tty=${tty#/dev/}
+tty=${tty#tty}
 
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
-export XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthority}
+export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority}
 
 mkdir -p "$cfgdir" "${XAUTHORITY%/*}"
 touch "$XAUTHORITY"
 
 trap 'cleanup' EXIT
-xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
 
 # Xorg will check if its SIGUSR1 disposition is SIG_IGN and use this state to
 # reply back to the parent process with SIGUSR1 as an indication it is ready
 # to accept connections.
 # Taking advantage of this feature allows us to launch our client directly
 # from the SIGUSR1 handler and avoid the need to poll for server readiness.
-trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}"' USR1
-(trap '' USR1 && exec Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
+trap 'do_sx' USR1
+export DISPLAY=:"$tty"
+(trap '' USR1 && exec Xorg "$DISPLAY" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
 wait "$pid"
