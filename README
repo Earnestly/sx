@@ -34,6 +34,12 @@ INTRODUCTION
   For a rational on why this exists, the author invites the reader to look
   over the source code for both xinit and startx.
 
+NOTES
+
+  Since the addition of Xorg.wrap it may be necessary to set allowed_users to
+  anybody in /etc/X11/Xwrapper.config as sx attempts to start clients from
+  within a subshell and is thusly not considered a console user.
+
 REQUIRES
 
   * Xorg
