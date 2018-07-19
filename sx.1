@@ -26,19 +26,22 @@ used to secure
 If this environment is not set then
 .B sx
 will create and use
-.B \%XDG_CONFIG_HOME/sx/xauthority
+.B \%XDG_DATA_HOME/sx/xauthority
 instead while also exporting this value to
 .BR XAUTHORITY .
 .TP
 .B XDG_CONFIG_HOME
 The directory used when searching for
-.I sxrc
-and storing
-.IR xauthority .
+.IR sxrc .
 .B \%HOME/.config
-will be used if
-.B XDG_CONFIG_HOME
-is not set.
+will be used if not set.
+.TP
+.B XDG_DATA_HOME
+The directory used for storing the
+.I xauthority
+file.
+.B \%HOME/.local/share
+will be used if not set.
 .SH FILES
 .TP
 .B XDG_CONFIG_HOME/sx/sxrc
@@ -46,7 +49,7 @@ The default client started by
 .BR sx .
 This file must be executable.
 .TP
-.B XDG_CONFIG_HOME/sx/xauthority
+.B XDG_DATA_HOME/sx/xauthority
 The default authority used by
 .B sx
 if an alternative file is not provided with

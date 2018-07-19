@@ -26,9 +26,11 @@ case $tty in
 esac
 
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
-export XAUTHORITY=${XAUTHORITY:-$cfgdir/xauthority}
+datadir=${XDG_DATA_HOME:-$HOME/.local/share}/sx
 
-mkdir -p "$cfgdir" "${XAUTHORITY%/*}"
+mkdir -p "$cfgdir" "$datadir"
+
+export XAUTHORITY=${XAUTHORITY:-$datadir/xauthority}
 touch "$XAUTHORITY"
 
 trap 'cleanup' EXIT
