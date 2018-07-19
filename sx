@@ -35,10 +35,10 @@ trap 'cleanup' EXIT
 xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
 
 # Xorg will check if its SIGUSR1 disposition is SIG_IGN and use this state to
-# reply back to the parent process with SIGUSR1 as an indication it is ready
-# to accept connections.
+# reply back to the parent process with its own SIGUSR1 as an indication it is
+# ready to accept connections.
 # Taking advantage of this feature allows us to launch our client directly
-# from the SIGUSR1 handler and avoid the need to poll for server readiness.
+# from a SIGUSR1 handler and avoid the need to poll for server readiness.
 trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}"' USR1
 (trap '' USR1 && exec Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
 wait "$pid"
