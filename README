@@ -15,15 +15,16 @@ INTRODUCTION
 
     * The server's command-line is hard coded and not exposed to the
       user.
-    * The server starts on the same tty the user logged in on.
     * The server doesn't listen on anything except unix domain sockets.
-    * The first DISPLAY is 1 instead of 0 contrary to what X(7) suggests.
+    * The server starts on the same tty the user logged in on.
+    * The first DISPLAY is 1 instead of 0 contrary to what X(7) suggests as it
+      is coupled to the tty number.
     * xauth entries are overwritten if the displayname is identical.
     * Corresponding xauth entries are unconditionally removed when the server
       exits.
     * The server uses the -noreset flag.
-    * While XAUTHORITY is still honoured, $XDG_CONFIG_HOME/sx/xauthfile is
-      used instead of $HOME/.Xauthority
+    * While XAUTHORITY is still honoured, $XDG_DATA_HOME/sx/xauthfile is used
+      by default instead of $HOME/.Xauthority
     * Very little proxy error checking is used preferring instead to let each
       tool speak for itself.
     * None of the typical /etc/X11/xinit infrastructure is directly used.
