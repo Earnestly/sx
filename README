@@ -31,7 +31,7 @@ INTRODUCTION
     * The XDG_CONFIG_HOME/sx/sxrc file is used instead of .xinitrc and is
       required to be executable.
 
-  For a rational on why this exists, the author invites the reader to look
+  For a rationale on why this exists, the author invites the reader to look
   over the source code for both xinit and startx.
 
 NOTES
