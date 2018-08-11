@@ -1,9 +1,9 @@
-.TH SX 1 2017-12-09 Linux
+.TH SX 1 "25 August 2018"
 .SH NAME
 sx \- start an xorg server
 .SH SYNOPSIS
 .B sx
-.RI [ client ]
+.RI [ "command " [ "arguments " ...]]
 .SH DESCRIPTION
 .B sx
 can be used to replace both
@@ -15,8 +15,11 @@ for starting an Xorg server.  By default
 will attempt execute
 .I sxrc
 unless a
-.I client
-argument is provided.
+.I command
+argument is provided.  The
+.I command
+may consistent of one or more
+.IR arguments .
 .SH ENVIRONMENT
 .TP
 .B XAUTHORITY
@@ -45,7 +48,7 @@ will be used if not set.
 .SH FILES
 .TP
 .B XDG_CONFIG_HOME/sx/sxrc
-The default client started by
+The default command started by
 .BR sx .
 This file must be executable.
 .TP
@@ -54,6 +57,19 @@ The default authority used by
 .B sx
 if an alternative file is not provided with
 .BR XAUTHORITY .
+.SH NOTES
+Since the addition of
+.BR Xorg.wrap (1)
+it may be necessary to set
+.I allowed_users
+to
+.I anybody
+in
+.BR \%/etc/X11/Xwrapper.config .
+This is due to
+.B sx
+attempting to run commands from within a subshell and is thusly not considered
+a console user.
 .SH SOURCE
 .UR https://github.com/Earnestly/sx
 .UE
