@@ -1,4 +1,4 @@
-.TH SX 1 "25 August 2018"
+.TH SX 1 "21 October 2018"
 .SH NAME
 sx \- start an xorg server
 .SH SYNOPSIS
@@ -12,13 +12,13 @@ and
 .BR startx (1)
 for starting an Xorg server.  By default
 .B sx
-will attempt execute
+will attempt to execute
 .I sxrc
 unless a
 .I command
-argument is provided.  The
+is provided.  The
 .I command
-may consistent of one or more
+may have additional
 .IR arguments .
 .SH ENVIRONMENT
 .TP
@@ -74,8 +74,9 @@ a console user.
 .UR https://github.com/Earnestly/sx
 .UE
 .SH SEE ALSO
-.BR Xorg (1),
-.BR xinit (1),
 .BR startx (1),
+.BR X (7),
+.BR xinit (1),
+.BR Xorg (1),
 .BR Xsecurity (7),
-.BR X (7)
+.BR Xwrapper.config (5)
