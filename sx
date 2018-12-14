@@ -20,10 +20,7 @@ cleanup() {
 
 stty=$(stty -g)
 tty=$(ps -o tty= $$)
-
-case $tty in
-    tty*) tty=${tty#tty}
-esac
+tty=${tty#tty}
 
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
 datadir=${XDG_DATA_HOME:-$HOME/.local/share}/sx
