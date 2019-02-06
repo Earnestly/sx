@@ -1,9 +1,9 @@
-PREFIX ?= /usr/local
-bindir ?= /bin
-mandir ?= /share/man
+PREFIX = /usr/local
+bindir = /bin
+mandir = /share/man
 
 install: sx sx.1
-	install -Dm0755 sx $(DESTDIR)$(PREFIX)$(bindir)/sx
-	install -Dm0644 sx.1 $(DESTDIR)$(PREFIX)$(mandir)/man1/sx.1
-
-.PHONY: install
+	mkdir -p $(DESTDIR)$(PREFIX)$(bindir)
+	mkdir -p $(DESTDIR)$(PREFIX)$(mandir)/man1
+	cp -f sx $(DESTDIR)$(PREFIX)$(bindir)
+	cp -f sx.1 $(DESTDIR)$(PREFIX)$(mandir)/man1
