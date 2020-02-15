@@ -19,8 +19,8 @@ cleanup() {
 }
 
 stty=$(stty -g)
-tty=$(ps -o tty= -p $$)
-tty=${tty#tty}
+tty=$(tty)
+tty=${tty#/dev/tty}
 
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
 datadir=${XDG_DATA_HOME:-$HOME/.local/share}/sx
