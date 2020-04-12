@@ -22,7 +22,7 @@ INTRODUCTION
     * Corresponding xauth entries are unconditionally removed when the
       server exits.
     * The server uses the -noreset flag.
-    * While XAUTHORITY is still honoured, $XDG_DATA_HOME/sx/xauthfile is
+    * While XAUTHORITY is still honoured, $XDG_DATA_HOME/sx/xauthority is
       used by default instead of $HOME/.Xauthority
     * Very little proxy error checking is used preferring instead to let
       each tool speak for itself.
