@@ -1,21 +1,20 @@
 #!/bin/sh --
 # sx - start an xserver
-
-# requires xauth Xorg
+# requires xauth Xorg /dev/urandom
 
 cleanup() {
-    if [ "$pid" ] && kill -0 "$pid" 2> /dev/null; then
-        kill -s TERM "$pid"
-        wait "$pid"
-        r=$?
-    fi
+    for pid; do
+        if kill -0 "$pid" 2> /dev/null; then
+            kill "$pid"
+            wait "$pid"
+        fi
+    done
 
     if ! stty "$stty"; then
         stty sane
     fi
 
     xauth remove :"$tty"
-    exit "${r:-$?}"
 }
 
 stty=$(stty -g)
@@ -29,14 +28,23 @@ mkdir -p -- "$cfgdir" "$datadir"
 export XAUTHORITY="${XAUTHORITY:-$datadir/xauthority}"
 touch -- "$XAUTHORITY"
 
-trap 'cleanup' EXIT
 xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
 
-# Xorg will check if its SIGUSR1 disposition is SIG_IGN and use this state to
-# reply back to the parent process with its own SIGUSR1 as an indication it is
-# ready to accept connections.
-# Taking advantage of this feature allows us to launch our client directly
-# from a SIGUSR1 handler and avoid the need to poll for server readiness.
-trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}"' USR1
-(trap '' USR1 && exec Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
-wait "$pid"
+for signal in HUP INT TERM; do
+    # The client variable is set by the USR1 signal trap and contains the
+    # client's PID.
+    # shellcheck disable=SC2154
+    trap 'cleanup "$client" "$server"; trap - "$signal"; kill -s "$signal" "$$"' "$signal"
+done
+trap cleanup EXIT
+
+# Xorg will check if its USR1 disposition is SIG_IGN and use this state to
+# reply back to the parent process with a SIGUSR1 of its own as indication it
+# is ready to accept connections.
+# Taking advantage of this feature allows launching the client directly from a
+# USR1 signal trap which obviates the need to poll for server readiness.
+trap 'DISPLAY=:$tty "${@:-$cfgdir/sxrc}" & client=$!; wait' USR1
+
+(trap '' USR1 && exec Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") &
+server=$!
+wait
