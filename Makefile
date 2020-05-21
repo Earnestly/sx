@@ -1,9 +1,9 @@
 PREFIX = /usr/local
-bindir = /bin
-mandir = /share/man
+bindir = $(PREFIX)/bin
+datarootdir = $(PREFIX)/share
+mandir = $(datarootdir)/man
 
 install: sx sx.1
-	mkdir -p $(DESTDIR)$(PREFIX)$(bindir)
-	mkdir -p $(DESTDIR)$(PREFIX)$(mandir)/man1
-	cp -f sx $(DESTDIR)$(PREFIX)$(bindir)
-	cp -f sx.1 $(DESTDIR)$(PREFIX)$(mandir)/man1
+	mkdir -p $(DESTDIR)$(bindir) $(DESTDIR)$(mandir)/man1
+	cp -f sx $(DESTDIR)$(bindir)
+	cp -f sx.1 $(DESTDIR)$(mandir)/man1
