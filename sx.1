@@ -1,4 +1,4 @@
-.TH SX 1 "6 February 2019" 2.1.1
+.TH SX 1 "6 October 2020" 2.1.6
 .SH NAME
 sx \- start an xorg server
 .SH SYNOPSIS
@@ -10,7 +10,9 @@ can be used to replace both
 .BR xinit (1)
 and
 .BR startx (1)
-for starting an Xorg server with an initial client.  By default
+for starting an
+.BR Xorg (1)
+server with an initial client.  By default
 .B sx
 will attempt to execute
 .I \%XDG_CONFIG_HOME/sx/sxrc
@@ -20,6 +22,11 @@ is provided.  The
 .I command
 may have additional
 .IR arguments .
+.SH EXIT STATUS
+.B sx
+will attempt to inherit the exit status from the
+.BR Xorg (1)
+server.  Otherwise it is 0.
 .SH ENVIRONMENT
 .TP
 .B XAUTHORITY
@@ -75,7 +82,7 @@ Use an existing
 .I .Xinitrc
 by specifying an appropriate interpreter such as
 .BR sh (1)
-or marking it executable with a correct interpreter line:
+or making it executable with a correct interpreter line:
 .IP
 .EX
 .B sx sh ~/.Xinitrc
