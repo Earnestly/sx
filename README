@@ -6,7 +6,9 @@ INTRODUCTION
   an Xorg server.
 
   It started life as a proof of concept while attempting to learn how both
-  xinit and startx worked.
+  xinit and startx worked while taking up the offer presented in startx:
+
+    > Site administrators are STRONGLY urged to write nicer versions.
 
   It is not a direct replacement however as it provides a different, more
   limited, interface.
@@ -31,7 +33,7 @@ INTRODUCTION
     * The XDG_CONFIG_HOME/sx/sxrc file is used instead of .xinitrc and is
       required to be executable.
 
-  For a rationale on why this exists, the author invites the reader to
+  For a rationale on why this exists the author invites the reader to
   look over the source code for both xinit and startx.
 
 REQUIRES
@@ -42,4 +44,4 @@ REQUIRES
 
 INSTALL
 
-  make PREFIX=/usr DESTDIR=staged install
+  make PREFIX=/usr install
