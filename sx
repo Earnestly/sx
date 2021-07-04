@@ -3,7 +3,7 @@
 # requires xauth Xorg /dev/urandom
 
 cleanup() {
-    if kill -0 "$pid" 2> /dev/null; then
+    if [ "$pid" ] && kill -0 "$pid" 2> /dev/null; then
         kill "$pid"
         wait "$pid"
         xorg=$?
@@ -15,7 +15,9 @@ cleanup() {
 
     xauth remove :"$tty"
 
-    exit "${xorg:-0}"
+    if [ "$1" = exit ]; then
+        exit "${xorg:-0}"
+    fi
 }
 
 stty=$(stty -g)
@@ -31,9 +33,8 @@ touch -- "$XAUTHORITY"
 
 xauth add :"$tty" MIT-MAGIC-COOKIE-1 "$(od -An -N16 -tx /dev/urandom | tr -d ' ')"
 
-for signal in HUP INT TERM QUIT; do
-    trap 'cleanup; trap - "$signal"; kill -s "$signal" "$$"' "$signal"
-done
+trap 'cleanup; trap - INT; kill -INT "$$"' INT
+trap 'cleanup exit' EXIT HUP TERM QUIT
 
 # Xorg will check whether it inherited a USR1 with a disposition of SIG_IGN and
 # use this state to reply back to the parent process with its own USR1.
@@ -44,4 +45,3 @@ trap 'DISPLAY=:$tty exec "${@:-$cfgdir/sxrc}" & wait "$!"' USR1
 
 (trap '' USR1 && exec Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
 wait "$pid"
-cleanup
