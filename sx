@@ -3,21 +3,21 @@
 # requires xauth Xorg /dev/urandom
 
 cleanup() {
-    if [ "$pid" ] && kill -0 "$pid" 2> /dev/null; then
-        kill "$pid"
-        wait "$pid"
-        xorg=$?
-    fi
+	if [ "$pid" ] && kill -0 "$pid" 2> /dev/null; then
+		kill "$pid"
+		wait "$pid"
+		xorg=$?
+	fi
 
-    if ! stty "$stty"; then
-        stty sane
-    fi
+	if ! stty "$stty"; then
+		stty sane
+	fi
 
     xauth remove :"$tty"
 
-    if [ "$1" = exit ]; then
-        exit "${xorg:-0}"
-    fi
+	if [ "$1" = exit ]; then
+		exit "${xorg:-0}"
+	fi
 }
 
 stty=$(stty -g)
