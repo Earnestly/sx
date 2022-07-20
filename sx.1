@@ -65,18 +65,18 @@ The default authority used by
 if an alternative file is not provided with
 .BR XAUTHORITY .
 .SH NOTES
-Since the addition of
+With the addition of
 .BR Xorg.wrap (1)
 it may be necessary to set
 .I allowed_users
 to
 .I anybody
 in
-.BR \%/etc/X11/Xwrapper.config .
-This is due to
+.B \%/etc/X11/Xwrapper.config
+if
 .B sx
-attempting to run commands from within a subshell and is thusly not considered
-a console user.
+is used in a pipeline or its standard output and standard error is redirected
+to a file as it will not be considered a console user.
 .SH EXAMPLES
 Use an existing
 .I .Xinitrc
