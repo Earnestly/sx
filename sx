@@ -27,8 +27,12 @@ mkdir -p -- "$cfgdir" "$datadir"
 export XAUTHORITY="${XAUTHORITY:-$datadir/xauthority}"
 touch -- "$XAUTHORITY"
 
-trap 'cleanup; trap "" EXIT; trap - INT; kill -s INT "$$"' INT
-trap 'cleanup; trap "" EXIT; exit "${xorg:-0}"' EXIT HUP TERM QUIT
+trap 'cleanup; exit "${xorg:-0}"' EXIT
+
+for signal in INT QUIT TERM; do
+    # shellcheck disable=SC2064
+    trap "cleanup; trap - $signal EXIT; kill -s $signal \$\$" "$signal"
+done
 
 # Xorg will return a USR1 signal to the parent process indicating it is ready
 # to accept connections if it inherited a USR1 signal with a SIG_IGN
