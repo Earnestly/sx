@@ -29,9 +29,9 @@ touch -- "$XAUTHORITY"
 
 trap 'cleanup; exit "${xorg:-0}"' EXIT
 
-for signal in INT QUIT TERM; do
+for signal in HUP INT QUIT TERM; do
     # shellcheck disable=SC2064
-    trap "cleanup; trap - $signal EXIT; kill -s $signal \$\$" "$signal"
+    trap "cleanup; trap - $signal EXIT; kill -s $signal $$" "$signal"
 done
 
 # Xorg will return a USR1 signal to the parent process indicating it is ready
