@@ -24,7 +24,7 @@ cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
 datadir=${XDG_DATA_HOME:-$HOME/.local/share}/sx
 mkdir -p -- "$cfgdir" "$datadir"
 
-export XAUTHORITY="${XAUTHORITY:-$datadir/xauthority}"
+export XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}"
 touch -- "$XAUTHORITY"
 
 trap 'cleanup; exit "${xorg:-0}"' EXIT
