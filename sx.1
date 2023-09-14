@@ -26,7 +26,10 @@ may have additional
 .B sx
 will attempt to inherit the exit status from the
 .BR Xorg (1)
-server.  Otherwise it is 0.
+server.  If
+.B sx
+was signalled then the exit status will reflect this, otherwise it will be
+zero.
 .SH ENVIRONMENT
 .TP
 .B XAUTHORITY
