@@ -21,10 +21,9 @@ tty=$(tty)
 tty=${tty#/dev/tty}
 
 cfgdir=${XDG_CONFIG_HOME:-$HOME/.config}/sx
-datadir=${XDG_DATA_HOME:-$HOME/.local/share}/sx
-mkdir -p -- "$cfgdir" "$datadir"
+mkdir -p -- "$cfgdir"
 
-export XAUTHORITY="${XAUTHORITY:-$datadir/xauthority}"
+export XAUTHORITY="${XAUTHORITY:-${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/xauthority}"
 touch -- "$XAUTHORITY"
 
 trap 'cleanup; exit "${xorg:-0}"' EXIT
